@@ -15,9 +15,8 @@ async def main():
         return
     bot = Bot(TOKEN)
     dp = setup_dispatcher(bot)
-
-    await dp.start_polling(bot)
     logger.info("Bot started")
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ bot = Bot(TOKEN)  # type: ignore
 logger.remove()
 logger.add(
     sink="bot_logs.log",
-    format="{time:DD:MM:YYYY HH:mm:ss} - {level} - {message}",
+    format="{time:DD:MM:YYYY | HH:mm:ss} | {level} | {message}",
     level="INFO",
 )
 
@@ -24,8 +24,11 @@ def setup_dispatcher(bot: Bot) -> Dispatcher:
 
     @dp.message(F.text)
     async def echo_handler(message: Message):
-        logger.info(f"Taked mesage: {message.text}")
-        await message.reply(f"You wrote: {message.text}")
+        if message.text != "/start":
+            logger.info(f"Taked message: {message.text}")
+            await message.reply(f"You wrote: {message.text}")
+        else:
+            logger.info("💽 Handled start command")
+        logger.info("✅ Handler done")
 
-    logger.info("✅ Dispatcher is done")
     return dp
