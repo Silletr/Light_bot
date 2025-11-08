@@ -1,9 +1,11 @@
-from aiogram import Bot, Dispatcher
+from aiogram.types import Message
+from aiogram import Bot, Dispatcher, F
+from loguru import logger
 import os
 from dotenv import load_dotenv
-from loguru import logger
 
 # --- BASIC SETTING ---
+
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 bot = Bot(TOKEN)  # type: ignore
@@ -15,4 +17,15 @@ logger.add(
     level="INFO",
 )
 
-dispatcher = Dispatcher(bot=Bot)
+
+# --- SETUP Dispatcher ---
+def setup_dispatcher(bot: Bot) -> Dispatcher:
+    dp = Dispatcher()
+
+    @dp.message(F.text)
+    async def echo_handler(message: Message):
+        logger.info(f"Taked mesage: {message.text}")
+        await message.reply(f"You wrote: {message.text}")
+
+    logger.info("✅ Dispatcher is done")
+    return dp
